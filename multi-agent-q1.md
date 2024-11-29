@@ -15,9 +15,8 @@
 
 ##### Code
 
-#
 
-```
+```python
 def evaluationFunction(self, currentGameState: GameState, action):
     ...
     foodList = successorGameState.getFood().asList()
