@@ -5,12 +5,12 @@
 - 22028309	Vũ Văn Phong - P
 
 ### Multi-agent Search
-Q1,Q2: Done!
-Q3 - H
-Q4 - K
-Q5 - P
+- Q1,Q2: Done!
+- Q3 - H
+- Q4 - K
+- Q5 - P
 
 ### Reinforcement Learning
-Q1 - P
-Q2 - K
-Q3 - H
+- Q1 - P
+- Q2 - K
+- Q3 - H
