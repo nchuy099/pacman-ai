@@ -75,17 +75,7 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        foodList = newFood.asList()
-        closestFood = float('inf')
-
-        for food in foodList:
-            closestFood = min(closestFood, manhattanDistance(food, newPos))
-            
-        for ghost in successorGameState.getGhostPositions():
-            if (manhattanDistance(newPos, ghost) < 2):
-                return -float('inf')
-                
-        return successorGameState.getScore() + 1.0 / (1.0 + closestFood)
+        return successorGameState.getScore()
 
 def scoreEvaluationFunction(currentGameState: GameState):
     """
@@ -146,92 +136,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        
-        # Format of result = [score, action]
-        result = self.get_value(gameState, 0, 0)
-
-        # Return the action from result
-        return result[1] # is the score
-
-    def get_value(self, gameState, index, depth):
-        """
-        Recursively evaluates the game state and returns the utility value and best action.
-        Handles different cases:
-        1. Terminal state
-        2. Max-agent (Pacman)
-        3. Min-agent (Ghosts)
-        """
-        # Terminal state: no legal actions or reached max depth
-        if len(gameState.getLegalActions(index)) == 0 or depth == self.depth:
-            return gameState.getScore(), ""  # Return score and no action
-
-        # Max-agent (Pacman), index = 0
-        if index == 0:
-            return self.max_value(gameState, index, depth)
-
-        # Min-agent (Ghosts), index > 0
-        else:
-            return self.min_value(gameState, index, depth)
-
-    def max_value(self, gameState, index, depth):
-        """
-        Evaluates and returns the best utility for Max-agent (Pacman).
-        Finds the highest utility score among all possible actions.
-        """
-        legalMoves = gameState.getLegalActions(index)  # All possible actions for Pacman
-        max_value = float("-inf")  # Start with the worst possible score
-        max_action = ""  # Best action to be chosen
-
-        for action in legalMoves:
-            # Generate the successor state after taking the action
-            successor = gameState.generateSuccessor(index, action)
-            successor_index = index + 1  # Move to the next agent (Ghost)
-            successor_depth = depth
-
-            # If all agents (including ghosts) have moved, increase the depth level
-            if successor_index == gameState.getNumAgents():
-                successor_index = 0  # Reset to Pacman
-                successor_depth += 1  # Increase the depth
-
-            # Recursively evaluate the successor state and get its score
-            current_value = self.get_value(successor, successor_index, successor_depth)[0]
-
-            # Update the best value and action if a better value is found
-            if current_value > max_value:
-                max_value = current_value
-                max_action = action
-
-        return max_value, max_action
-
-    def min_value(self, gameState, index, depth):
-        """
-        Evaluates and returns the worst utility for Min-agent (Ghosts).
-        Finds the lowest utility score among all possible actions.
-        """
-        legalMoves = gameState.getLegalActions(index)  # All possible actions for Ghost
-        min_value = float("inf")  # Start with the best possible score
-        min_action = ""  # Best action to be chosen
-
-        for action in legalMoves:
-            # Generate the successor state after taking the action
-            successor = gameState.generateSuccessor(index, action)
-            successor_index = index + 1  # Move to the next agent
-            successor_depth = depth
-
-            # If all agents (including ghosts) have moved, increase the depth level
-            if successor_index == gameState.getNumAgents():
-                successor_index = 0  # Reset to Pacman
-                successor_depth += 1  # Increase the depth
-
-            # Recursively evaluate the successor state and get its score
-            current_value = self.get_value(successor, successor_index, successor_depth)[0]
-
-            # Update the worst value and action if a better value is found
-            if current_value < min_value:
-                min_value = current_value
-                min_action = action
-
-        return min_value, min_action
+        util.raiseNotDefined()
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
