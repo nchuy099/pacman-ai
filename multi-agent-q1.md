@@ -15,7 +15,6 @@
 
 ##### Code
 
-#
 
 ```
 def evaluationFunction(self, currentGameState: GameState, action):
