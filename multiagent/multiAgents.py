@@ -78,12 +78,15 @@ class ReflexAgent(Agent):
         foodList = newFood.asList()
         closestFood = float('inf')
 
+        # FOOD PROCESS: Find the distance to the closest food
         for food in foodList:
             closestFood = min(closestFood, manhattanDistance(food, newPos))
-            
+        
+        # GHOST PROCESS: Check the distance to each ghost
         for ghost in successorGameState.getGhostPositions():
-            if (manhattanDistance(newPos, ghost) < 2):
-                return -float('inf')
+            # If Pacman is too close to a ghost (distance < 2), return a large negative value
+            if manhattanDistance(newPos, ghost) < 2:
+                return -float('inf')  # Penalize heavily for dangerous moves
                 
         return successorGameState.getScore() + 1.0 / (1.0 + closestFood)
 
