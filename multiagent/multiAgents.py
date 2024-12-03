@@ -261,7 +261,47 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         legal moves.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        actions = gameState.getLegalActions(0)
+        currentScore = float("-inf")
+        returnAction = ''
+        for action in actions:
+            nextState = gameState.generateSuccessor(0, action)
+            # Next level is a expect level. Hence calling expectLevel for successors of the root.
+            score = self.expectValue(nextState, 0, 1)
+            # Choosing the action which is Maximum of the successors.
+            if score > currentScore:
+                returnAction = action
+                currentScore = score
+        return returnAction
+
+    def maxValue(self, gameState, depth):
+        currDepth = depth + 1
+        if gameState.isWin() or gameState.isLose() or currDepth==self.depth:
+            return self.evaluationFunction(gameState)
+        maxvalue = float("-inf")
+        actions = gameState.getLegalActions(0)
+        for action in actions:
+            successor= gameState.generateSuccessor(0, action)
+            maxvalue = max (maxvalue, self.expectValue(successor, currDepth, 1))
+        return maxvalue
+    
+    def expectValue(self, gameState, depth, agentIndex):
+        if gameState.isWin() or gameState.isLose():
+            return self.evaluationFunction(gameState)
+        actions = gameState.getLegalActions(agentIndex)
+        totalexpectedvalue = 0
+        numberofactions = len(actions)
+        for action in actions:
+            successor= gameState.generateSuccessor(agentIndex,action)
+            if agentIndex == (gameState.getNumAgents() - 1):
+                expectedvalue = self.maxValue(successor, depth)
+            else:
+                expectedvalue = self.expectValue(successor, depth, agentIndex+1)
+            totalexpectedvalue = totalexpectedvalue + expectedvalue
+        if numberofactions == 0:
+            return  0
+        return float(totalexpectedvalue)/float(numberofactions)
+        
 
 def betterEvaluationFunction(currentGameState: GameState):
     """
