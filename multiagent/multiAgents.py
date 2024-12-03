@@ -75,19 +75,21 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        foodList = newFood.asList()
+        foodList = successorGameState.getFood().asList()
         closestFood = float('inf')
 
-        # FOOD PROCESS: Find the distance to the closest food
+        # XỬ LÝ FOOD: Tìm khoảng cách đến thức ăn gần nhất
         for food in foodList:
             closestFood = min(closestFood, manhattanDistance(food, newPos))
-        
-        # GHOST PROCESS: Check the distance to each ghost
+
+        # XỬ LÍ GHOST: Kiểm tra khoảng cách đến từng con ma
         for ghost in successorGameState.getGhostPositions():
-            # If Pacman is too close to a ghost (distance < 2), return a large negative value
+            # Nếu Pacman quá gần ma (khoảng cách < 2), phạt nặng, trả về giá trị âm lớn
             if manhattanDistance(newPos, ghost) < 2:
-                return -float('inf')  # Penalize heavily for dangerous moves
-                
+                return -float('inf')
+
+        # Trả về điểm đánh giá
+        # Thưởng dựa trên khoảng cách đến thức ăn gần nhất (càng gần càng tốt)
         return successorGameState.getScore() + 1.0 / (1.0 + closestFood)
 
 def scoreEvaluationFunction(currentGameState: GameState):
@@ -126,80 +128,57 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
 
     def getAction(self, gameState: GameState):
-        """
-        Returns the minimax action from the current gameState using self.depth
-        and self.evaluationFunction.
-
-        Here are some method calls that might be useful when implementing minimax.
-
-        gameState.getLegalActions(agentIndex):
-        Returns a list of legal actions for an agent
-        agentIndex=0 means Pacman, ghosts are >= 1
-
-        gameState.generateSuccessor(agentIndex, action):
-        Returns the successor game state after an agent takes an action
-
-        gameState.getNumAgents():
-        Returns the total number of agents in the game
-
-        gameState.isWin():
-        Returns whether or not the game state is a winning state
-
-        gameState.isLose():
-        Returns whether or not the game state is a losing state
-        """
-        "*** YOUR CODE HERE ***"
-        
-        # Format of result = [score, action]
+        # result có dạng [score, action]
         result = self.get_value(gameState, 0, 0)
 
-        # Return the action from result
-        return result[1] # is the score
-
+        # Trả về action tốt nhất từ result
+        return result[1] 
+    
     def get_value(self, gameState, index, depth):
         """
-        Recursively evaluates the game state and returns the utility value and best action.
-        Handles different cases:
-        1. Terminal state
-        2. Max-agent (Pacman)
-        3. Min-agent (Ghosts)
+        Đệ quy đánh giá gameState rồi trả về score tốt nhất cùng action
+        Xử lý các trường hợp:
+        1. Trạng thái kết thúc (terminal state)
+        2. Maximizer (Pacman)
+        3. Minimizer (Ghosts)
         """
-        # Terminal state: no legal actions or reached max depth
+        # Trạng thái kết thúc: Không có hành động hợp lệ hoặc đạt đến độ sâu tối đa
         if len(gameState.getLegalActions(index)) == 0 or depth == self.depth:
-            return gameState.getScore(), ""  # Return score and no action
+            return gameState.getScore(), ""  # Trả về điểm số và không có hành động
 
-        # Max-agent (Pacman), index = 0
+        # Maximizer (Pacman), index = 0
         if index == 0:
             return self.max_value(gameState, index, depth)
 
-        # Min-agent (Ghosts), index > 0
+        # Các minimizers (Ghosts), index > 0
         else:
             return self.min_value(gameState, index, depth)
 
     def max_value(self, gameState, index, depth):
         """
-        Evaluates and returns the best utility for Max-agent (Pacman).
-        Finds the highest utility score among all possible actions.
+        Đánh giá và trả về ulitity tốt nhất và action cho Max-agent (Pacman).
+        Tìm giá trị cao nhất trong số các hành động có thể thực hiện.
         """
-        legalMoves = gameState.getLegalActions(index)  # All possible actions for Pacman
-        max_value = float("-inf")  # Start with the worst possible score
-        max_action = ""  # Best action to be chosen
+        legalMoves = gameState.getLegalActions(index)  # Tất cả các hành động hợp lệ của Pacman
+        max_value = float("-inf")  # Khởi tạo giá trị tối thiểu ban đầu
+        max_action = ""  # Hành động tốt nhất
 
+        # Duyệt qua tất cả các hành động hợp lệ của Pacman
         for action in legalMoves:
-            # Generate the successor state after taking the action
+            # Sinh trạng thái kế tiếp sau khi thực hiện hành động
             successor = gameState.generateSuccessor(index, action)
-            successor_index = index + 1  # Move to the next agent (Ghost)
+            successor_index = index + 1  # Chuyển sang tác nhân tiếp theo (Ghost)
             successor_depth = depth
 
-            # If all agents (including ghosts) have moved, increase the depth level
+            # Nếu tất cả các tác nhân (bao gồm Ghost) đã thực hiện hành động, tăng độ sâu
             if successor_index == gameState.getNumAgents():
-                successor_index = 0  # Reset to Pacman
-                successor_depth += 1  # Increase the depth
+                successor_index = 0  # Quay lại Pacman
+                successor_depth += 1  # Tăng độ sâu
 
-            # Recursively evaluate the successor state and get its score
+            # Đệ quy đánh giá trạng thái kế tiếp và lấy giá trị của nó
             current_value = self.get_value(successor, successor_index, successor_depth)[0]
 
-            # Update the best value and action if a better value is found
+            # Cập nhật giá trị tối đa và hành động tốt nhất nếu tìm được giá trị lớn hơn
             if current_value > max_value:
                 max_value = current_value
                 max_action = action
@@ -208,28 +187,29 @@ class MinimaxAgent(MultiAgentSearchAgent):
 
     def min_value(self, gameState, index, depth):
         """
-        Evaluates and returns the worst utility for Min-agent (Ghosts).
-        Finds the lowest utility score among all possible actions.
+        Đánh giá và trả về giá trị tối ưu cho Min-agent (Ghosts).
+        Tìm giá trị thấp nhất trong số các hành động có thể thực hiện.
         """
-        legalMoves = gameState.getLegalActions(index)  # All possible actions for Ghost
-        min_value = float("inf")  # Start with the best possible score
-        min_action = ""  # Best action to be chosen
+        legalMoves = gameState.getLegalActions(index)  # Tất cả các hành động hợp lệ của Ghost
+        min_value = float("inf")  # Khởi tạo giá trị tối đa ban đầu
+        min_action = ""  # Hành động tốt nhất
 
+        # Duyệt qua tất cả các hành động hợp lệ của Ghost
         for action in legalMoves:
-            # Generate the successor state after taking the action
+            # Sinh trạng thái kế tiếp sau khi thực hiện hành động
             successor = gameState.generateSuccessor(index, action)
-            successor_index = index + 1  # Move to the next agent
+            successor_index = index + 1  # Chuyển sang tác nhân tiếp theo
             successor_depth = depth
 
-            # If all agents (including ghosts) have moved, increase the depth level
+            # Nếu tất cả các tác nhân (bao gồm Ghost) đã thực hiện hành động, tăng độ sâu
             if successor_index == gameState.getNumAgents():
                 successor_index = 0  # Reset to Pacman
                 successor_depth += 1  # Increase the depth
 
-            # Recursively evaluate the successor state and get its score
+            # Đệ quy đánh giá trạng thái kế tiếp và lấy giá trị của nó
             current_value = self.get_value(successor, successor_index, successor_depth)[0]
 
-            # Update the worst value and action if a better value is found
+            # Cập nhật giá trị tối thiểu và hành động tốt nhất nếu tìm được giá trị nhỏ hơn
             if current_value < min_value:
                 min_value = current_value
                 min_action = action
