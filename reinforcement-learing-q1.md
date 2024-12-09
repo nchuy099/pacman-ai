@@ -4,10 +4,12 @@
 
 ##### Nhiệm vụ
 
-- Cài đặt thuật toán Value Iteration - `V*(s)` sử dụng phiên bản batch, `Vk(s)` dựa trên` Vk-1(s')`, cụ thể giá trị của trạng thái` `s tại vòng lặp` `k được tính từ các giá trị của các trạng thái mà trạng thái s có thể chuyển đến` (s')` trong vòng lặp trước đó` (k-1)` .
+- Cài đặt thuật toán Value Iteration - `V*(s)` sử dụng phiên bản batch, `Vk(s)` dựa trên` Vk-1(s')`, cụ thể giá trị của trạng thái `s` tại vòng lặp `k` được tính từ các giá trị của các trạng thái mà trạng thái s có thể chuyển đến `(s')` trong vòng lặp trước đó `(k-1)` .
 - Mục tiêu của thuật toán Value Iteration là tính toán giá trị tối ưu của các trạng thái trong một MDP (Markov Decision Process) và xác định hành động tối ưu tại mỗi trạng thái, sao cho phần thưởng lâu dài mà tác nhân nhận được là lớn nhất.
 
 ##### Phương pháp
+- Cài đặt dựa trên công thức
+![image](https://github.com/user-attachments/assets/2ef0ede3-a201-47d1-835a-24ad12534377)
 
 Cài đặt các hàm sau
 
