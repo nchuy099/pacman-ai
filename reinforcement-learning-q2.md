@@ -102,4 +102,4 @@ def question2e():
     return 0.01, 0.3, 20
 ```
 ### Tóm tắt
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/9b6828c1-d955-492a-8add-a8ad875693dc)
