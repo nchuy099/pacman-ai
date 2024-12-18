@@ -58,10 +58,12 @@
 - Tính toán khoảng cách gần nhất đến ma bình thường và ma bị sợ:
 
 ```python
-    minGhDist = min(GhDistList) if GhDistList else float('inf')
-    minScGhDist = min(ScGhDistList) if ScGhDistList else float('inf')
-    # minGhDist: Tìm khoảng cách gần nhất đến ma bình thường. Nếu không có ma bình thường, trả về giá trị vô cùng (Pacman không phải tránh ma).
-    # minScGhDist: Tìm khoảng cách gần nhất đến ma bị sợ. Nếu không có ma bị sợ, trả về giá trị vô cùng.
+    minGhDist=-1
+    if len(GhDistList) > 0:
+        minGhDist=min(GhDistList)        # minGhDist: Tìm khoảng cách gần nhất đến ma bình thường. Nếu không có ma bình thường, trả về giá trị vô cùng (Pacman không phải tránh ma).                                                                    
+    minScGhDist=-1                                                                                          
+    if len(ScGhDistList)>0:
+        minScGhDist=min(ScGhDistList)     # minScGhDist: Tìm khoảng cách gần nhất đến ma bị sợ. Nếu không có ma bị sợ, trả về giá trị vô cùng.
     
 ```
 - Tính toán điểm dựa trên các yếu tố:
