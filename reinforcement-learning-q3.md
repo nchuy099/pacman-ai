@@ -64,6 +64,7 @@
 ```
 
 - update: Cập nhật Q-value sau khi thực hiện hành động
+![image](https://www.oreilly.com/api/v2/epubs/9781789345803/files/assets/0ca5fe41-4a08-4075-a9ba-171d57fe1947.png)
 ```python
     def update(self, state, action, nextState, reward: float):
         """
