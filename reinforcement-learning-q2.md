@@ -55,7 +55,7 @@ def question2a():
 ##### kết quả:
 ```python
 def question2b():
-    return 0.5, 0.2, -1
+    return 0.5, 0.3, -1
 
 ```
 
@@ -70,7 +70,7 @@ def question2b():
 ##### kết quả:
 ```python
 def question2c():
-    return 0.9, 0.05, -2
+    return 0.9, 0.1, -1
 ```
 
 #### Câu d: Prefer the distant exit (+10), avoiding the cliff (-10)
@@ -84,7 +84,7 @@ def question2c():
 ##### kết quả:
 ```python
 def question2d():
-    return 0.9, 0.2, -1
+    return 0.9, 0.3, -1
 
 ```
 
